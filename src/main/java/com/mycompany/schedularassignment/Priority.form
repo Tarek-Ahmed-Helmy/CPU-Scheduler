@@ -102,7 +102,7 @@
             <Component class="javax.swing.JTable" name="table">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="4" rowCount="12">
+                  <Table columnCount="4" rowCount="0">
                     <Column editable="true" title="Process #" type="java.lang.Object"/>
                     <Column editable="true" title="Arrival Time" type="java.lang.Object"/>
                     <Column editable="true" title="Burst Time " type="java.lang.Object"/>
@@ -276,6 +276,7 @@
             <Property name="text" type="java.lang.String" value="Add "/>
           </Properties>
           <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addMouseClicked"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addActionPerformed"/>
           </Events>
         </Component>

@@ -4,6 +4,10 @@
  */
 package com.mycompany.schedularassignment;
 
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author som3a
@@ -17,9 +21,12 @@ public class Priority extends javax.swing.JFrame {
         initComponents();
     }
     int noofprocesses;
+    int counter=1;
+    ArrayList<ArrayList<String>> info = new ArrayList<ArrayList<String>>();
     public Priority(String N) {
         initComponents();
         noofprocesses=Integer.parseInt(N);
+        processnumber.setText("P"+Integer.toString(counter));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -77,18 +84,7 @@ public class Priority extends javax.swing.JFrame {
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Process #", "Arrival Time", "Burst Time ", "Priority"
@@ -124,6 +120,11 @@ public class Priority extends javax.swing.JFrame {
         jLabel4.setText("/*1 is the highest priority*/");
 
         add.setText("Add ");
+        add.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addMouseClicked(evt);
+            }
+        });
         add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addActionPerformed(evt);
@@ -246,6 +247,37 @@ public class Priority extends javax.swing.JFrame {
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_addActionPerformed
+
+    private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
+        boolean key=false;
+        try{
+            if(counter==noofprocesses+1){
+                JOptionPane.showMessageDialog(this,"");
+            
+            }else if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()||priority.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this,"All text fields must be filled!");
+            }
+            else if(Integer.parseInt(arrivaltime.getText())>=0&&Integer.parseInt(bursttime.getText())>=1&&Integer.parseInt(priority.getText())>=1){
+            key=true;
+            String pNo = "P"+Integer.toString(counter++);
+            processnumber.setText(pNo);
+            ArrayList<String> data= new ArrayList<String>();
+            data.add(pNo);
+            data.add(arrivaltime.getText());
+            data.add(bursttime.getText());
+            data.add(priority.getText());
+            String [] row = {pNo, arrivaltime.getText(), bursttime.getText(), priority.getText()};
+            DefaultTableModel tab=(DefaultTableModel)table.getModel();
+            tab.addRow(row);
+            info.add(data);
+            }else{
+                JOptionPane.showMessageDialog(this,"Arrival time must be >=0 and Burst time must be >= 1 and priority must be >= 1");
+            }
+        }
+        catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(this,"Time and Priority must be integer!");
+        }
+    }//GEN-LAST:event_addMouseClicked
 
     
     /*

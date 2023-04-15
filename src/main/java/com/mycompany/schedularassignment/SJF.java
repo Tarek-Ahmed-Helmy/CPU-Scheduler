@@ -4,6 +4,10 @@
  */
 package com.mycompany.schedularassignment;
 
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author som3a
@@ -17,9 +21,12 @@ public class SJF extends javax.swing.JFrame {
         initComponents();
     }
     int noofprocesses;
+    int counter=1;
+    ArrayList<ArrayList<String>> info = new ArrayList<ArrayList<String>>();
     public SJF(String N) {
         initComponents();
         noofprocesses=Integer.parseInt(N);
+        processnumber.setText("P"+Integer.toString(counter));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -32,10 +39,10 @@ public class SJF extends javax.swing.JFrame {
 
         jPanel8 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        arrivaltime3 = new javax.swing.JTextField();
+        arrivaltime = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        bursttime3 = new javax.swing.JTextField();
-        add3 = new javax.swing.JButton();
+        bursttime = new javax.swing.JTextField();
+        add = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         jPanel9 = new javax.swing.JPanel();
@@ -51,27 +58,21 @@ public class SJF extends javax.swing.JFrame {
 
         jLabel14.setText("BurstTime:");
 
-        add3.setText("Add ");
-        add3.addActionListener(new java.awt.event.ActionListener() {
+        add.setText("Add ");
+        add.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addMouseClicked(evt);
+            }
+        });
+        add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                add3ActionPerformed(evt);
+                addActionPerformed(evt);
             }
         });
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Process #", "Arrival Time", "Burst Time "
@@ -125,8 +126,8 @@ public class SJF extends javax.swing.JFrame {
                             .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(75, 75, 75)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(arrivaltime3, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bursttime3, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(arrivaltime, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bursttime, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(84, 84, 84)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -139,7 +140,7 @@ public class SJF extends javax.swing.JFrame {
                 .addGap(122, 122, 122))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(add3, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(add, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
@@ -167,16 +168,16 @@ public class SJF extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(arrivaltime3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(arrivaltime, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                                 .addGap(11, 11, 11)
-                                .addComponent(bursttime3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(bursttime, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addComponent(add3)
+                .addComponent(add)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -201,14 +202,44 @@ public class SJF extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void add3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add3ActionPerformed
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_add3ActionPerformed
+    }//GEN-LAST:event_addActionPerformed
 
     private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
         new StartWindow().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_backMouseClicked
+
+    private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
+        boolean key=false;
+        try{
+            if(counter==noofprocesses+1){
+                JOptionPane.showMessageDialog(this,"");
+            
+            }else if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this,"All text fields must be filled!");
+            }
+            else if(Integer.parseInt(arrivaltime.getText())>=0&&Integer.parseInt(bursttime.getText())>=1){
+            key=true;
+            String pNo = "P"+Integer.toString(counter++);
+            processnumber.setText(pNo);
+            ArrayList<String> data= new ArrayList<String>();
+            data.add(pNo);
+            data.add(arrivaltime.getText());
+            data.add(bursttime.getText());
+            String [] row = {pNo, arrivaltime.getText(), bursttime.getText()};
+            DefaultTableModel tab=(DefaultTableModel)table.getModel();
+            tab.addRow(row);
+            info.add(data);
+            }else{
+                JOptionPane.showMessageDialog(this,"Arrival time must be >=0 and Burst time must be >= 1");
+            }
+        }
+        catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(this,"Time must be integer!");
+        }
+    }//GEN-LAST:event_addMouseClicked
 
     /**
      * @param args the command line arguments
@@ -246,10 +277,10 @@ public class SJF extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton add3;
-    private javax.swing.JTextField arrivaltime3;
+    private javax.swing.JButton add;
+    private javax.swing.JTextField arrivaltime;
     private javax.swing.JButton back;
-    private javax.swing.JTextField bursttime3;
+    private javax.swing.JTextField bursttime;
     private javax.swing.JComboBox<String> combobox;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;

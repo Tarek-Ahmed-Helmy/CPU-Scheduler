@@ -4,6 +4,10 @@
  */
 package com.mycompany.schedularassignment;
 
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author som3a
@@ -17,9 +21,12 @@ public class RR extends javax.swing.JFrame {
         initComponents();
     }
     int noofprocesses;
+    int counter=1;
+    ArrayList<ArrayList<String>> info = new ArrayList<ArrayList<String>>();
     public RR(String N) {
         initComponents();
         noofprocesses=Integer.parseInt(N);
+        processnumber.setText("P"+Integer.toString(counter));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -36,7 +43,7 @@ public class RR extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         bursttime = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        quantum = new javax.swing.JTextField();
+        quantumtime = new javax.swing.JTextField();
         add = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
@@ -53,13 +60,18 @@ public class RR extends javax.swing.JFrame {
 
         jLabel3.setText("Quantum Time:");
 
-        quantum.addActionListener(new java.awt.event.ActionListener() {
+        quantumtime.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                quantumActionPerformed(evt);
+                quantumtimeActionPerformed(evt);
             }
         });
 
         add.setText("Add ");
+        add.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addMouseClicked(evt);
+            }
+        });
         add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addActionPerformed(evt);
@@ -68,18 +80,7 @@ public class RR extends javax.swing.JFrame {
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Process #", "Arrival Time", "Burst Time ", "Quantum Time"
@@ -142,7 +143,7 @@ public class RR extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(67, 67, 67)
-                        .addComponent(quantum, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(quantumtime, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(146, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
@@ -170,7 +171,7 @@ public class RR extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(quantum, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(quantumtime, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(add)
                 .addGap(18, 18, 18)
@@ -198,9 +199,9 @@ public class RR extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void quantumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantumActionPerformed
+    private void quantumtimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantumtimeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_quantumActionPerformed
+    }//GEN-LAST:event_quantumtimeActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
@@ -210,6 +211,37 @@ public class RR extends javax.swing.JFrame {
         new StartWindow().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_backMouseClicked
+
+    private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
+        boolean key=false;
+        try{
+            if(counter==noofprocesses+1){
+                JOptionPane.showMessageDialog(this,"");
+            
+            }else if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()||quantumtime.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this,"All text fields must be filled!");
+            }
+            else if(Integer.parseInt(arrivaltime.getText())>=0&&Integer.parseInt(bursttime.getText())>=1&&Integer.parseInt(quantumtime.getText())>=1){
+            key=true;
+            String pNo = "P"+Integer.toString(counter++);
+            processnumber.setText(pNo);
+            ArrayList<String> data= new ArrayList<String>();
+            data.add(pNo);
+            data.add(arrivaltime.getText());
+            data.add(bursttime.getText());
+            data.add(quantumtime.getText());
+            String [] row = {pNo, arrivaltime.getText(), bursttime.getText(), quantumtime.getText()};
+            DefaultTableModel tab=(DefaultTableModel)table.getModel();
+            tab.addRow(row);
+            info.add(data);
+            }else{
+                JOptionPane.showMessageDialog(this,"Arrival time must be >=0 and Burst time must be >= 1 and Quantum time must be >= 1");
+            }
+        }
+        catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(this,"Time must be integer!");
+        }
+    }//GEN-LAST:event_addMouseClicked
 
     /**
      * @param args the command line arguments
@@ -259,7 +291,7 @@ public class RR extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel processnumber;
-    private javax.swing.JTextField quantum;
+    private javax.swing.JTextField quantumtime;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

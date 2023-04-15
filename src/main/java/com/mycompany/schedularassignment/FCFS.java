@@ -5,7 +5,9 @@
 
 package com.mycompany.schedularassignment;
 
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,10 +21,11 @@ public class FCFS extends javax.swing.JFrame {
     }
     int noofprocesses;
     int counter=1;
+    ArrayList<ArrayList<String>> info = new ArrayList<ArrayList<String>>();
     public FCFS(String N) {
         initComponents();
         noofprocesses=Integer.parseInt(N);
-        processnumber.setText("P"+Integer.toString(counter++));
+        processnumber.setText("P"+Integer.toString(counter));
     }
     /** This method is called from within the constructor to
      * initialize the form.
@@ -41,6 +44,7 @@ public class FCFS extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         processnumber = new javax.swing.JLabel();
+        simulate = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         back = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -69,12 +73,21 @@ public class FCFS extends javax.swing.JFrame {
 
         processnumber.setText("p#");
 
+        simulate.setText("Simulate");
+        simulate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                simulateMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(680, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(simulate, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
                 .addComponent(add, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39))
             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -93,7 +106,7 @@ public class FCFS extends javax.swing.JFrame {
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(processnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(458, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,7 +126,9 @@ public class FCFS extends javax.swing.JFrame {
                         .addGap(7, 7, 7)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(add)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(add)
+                    .addComponent(simulate))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -143,18 +158,7 @@ public class FCFS extends javax.swing.JFrame {
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Process #", "Arrival Time", "Burst Time "
@@ -221,8 +225,16 @@ public class FCFS extends javax.swing.JFrame {
             }
             else if(Integer.parseInt(arrivaltime.getText())>=0&&Integer.parseInt(bursttime.getText())>=1){
             key=true;
-            processnumber.setText("P"+Integer.toString(counter++));
-         
+            String pNo = "P"+Integer.toString(counter++);
+            processnumber.setText(pNo);
+            ArrayList<String> data= new ArrayList<String>();
+            data.add(pNo);
+            data.add(arrivaltime.getText());
+            data.add(bursttime.getText());
+            String [] row = {pNo, arrivaltime.getText(), bursttime.getText()};
+            DefaultTableModel tab=(DefaultTableModel)table.getModel();
+            tab.addRow(row);
+            info.add(data);
             }else{
                 JOptionPane.showMessageDialog(this,"Arrival time must be >=0 and Burst time must be >= 1");
             }
@@ -232,6 +244,13 @@ public class FCFS extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_addMouseClicked
+
+    private void simulateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simulateMouseClicked
+        if(counter==noofprocesses+1){
+            new FCFSsimulation(info).setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_simulateMouseClicked
 
     /**
      * @param args the command line arguments
@@ -281,6 +300,7 @@ public class FCFS extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel processnumber;
+    private javax.swing.JButton simulate;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 
