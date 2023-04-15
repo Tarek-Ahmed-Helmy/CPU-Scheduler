@@ -18,8 +18,10 @@ public class RRsimulation extends javax.swing.JFrame {
     public RRsimulation() {
         initComponents();
     }
-    public RRsimulation(ArrayList<ArrayList<String>> info) {
+    int quantum_time;
+    public RRsimulation(ArrayList<ArrayList<String>> info, int q) {
         initComponents();
+        quantum_time=q;
     }
 
     /**
@@ -58,6 +60,7 @@ public class RRsimulation extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**

@@ -18,8 +18,11 @@ public class Prioritysimulation extends javax.swing.JFrame {
     public Prioritysimulation() {
         initComponents();
     }
-    public Prioritysimulation(ArrayList<ArrayList<String>> info) {
+    boolean preemptive;
+    public Prioritysimulation(ArrayList<ArrayList<String>> info, boolean p) {
         initComponents();
+        preemptive=p;
+        
     }
 
     /**
@@ -58,6 +61,7 @@ public class Prioritysimulation extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**

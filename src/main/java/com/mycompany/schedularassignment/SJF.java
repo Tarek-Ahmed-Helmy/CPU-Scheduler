@@ -51,6 +51,7 @@ public class SJF extends javax.swing.JFrame {
         combobox = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         processnumber = new javax.swing.JLabel();
+        simulate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -113,6 +114,13 @@ public class SJF extends javax.swing.JFrame {
 
         processnumber.setText("p#");
 
+        simulate.setText("Simulate");
+        simulate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                simulateMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -140,6 +148,8 @@ public class SJF extends javax.swing.JFrame {
                 .addGap(122, 122, 122))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(simulate)
+                .addGap(37, 37, 37)
                 .addComponent(add, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
@@ -177,7 +187,9 @@ public class SJF extends javax.swing.JFrame {
                                 .addGap(11, 11, 11)
                                 .addComponent(bursttime, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addComponent(add)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(add)
+                    .addComponent(simulate))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -241,6 +253,17 @@ public class SJF extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addMouseClicked
 
+    private void simulateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simulateMouseClicked
+        if(counter==noofprocesses+1&&combobox.getSelectedIndex()!=0){
+            boolean preemptive=combobox.getSelectedIndex()==1;
+            new SJFsimulation(info, preemptive).setVisible(true);
+            this.dispose();
+        }
+        else if(counter==noofprocesses+1){
+            JOptionPane.showMessageDialog(this,"Select the type preemptive or non");
+        }
+    }//GEN-LAST:event_simulateMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -290,6 +313,7 @@ public class SJF extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel processnumber;
+    private javax.swing.JButton simulate;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

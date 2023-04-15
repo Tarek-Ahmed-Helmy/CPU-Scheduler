@@ -51,6 +51,7 @@ public class RR extends javax.swing.JFrame {
         back = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         processnumber = new javax.swing.JLabel();
+        simulate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -83,7 +84,7 @@ public class RR extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Process #", "Arrival Time", "Burst Time ", "Quantum Time"
+                "Process #", "Arrival Time", "Burst Time "
             }
         ));
         jScrollPane1.setViewportView(table);
@@ -116,12 +117,21 @@ public class RR extends javax.swing.JFrame {
 
         processnumber.setText("p#");
 
+        simulate.setText("Simulate");
+        simulate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                simulateMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(simulate, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(55, 55, 55)
                 .addComponent(add, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39))
             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -173,7 +183,9 @@ public class RR extends javax.swing.JFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(quantumtime, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(add)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(add)
+                    .addComponent(simulate))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -229,8 +241,8 @@ public class RR extends javax.swing.JFrame {
             data.add(pNo);
             data.add(arrivaltime.getText());
             data.add(bursttime.getText());
-            data.add(quantumtime.getText());
-            String [] row = {pNo, arrivaltime.getText(), bursttime.getText(), quantumtime.getText()};
+            
+            String [] row = {pNo, arrivaltime.getText(), bursttime.getText()};
             DefaultTableModel tab=(DefaultTableModel)table.getModel();
             tab.addRow(row);
             info.add(data);
@@ -242,6 +254,13 @@ public class RR extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,"Time must be integer!");
         }
     }//GEN-LAST:event_addMouseClicked
+
+    private void simulateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simulateMouseClicked
+        if(counter==noofprocesses+1){
+            new RRsimulation(info, Integer.parseInt(quantumtime.getText())).setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_simulateMouseClicked
 
     /**
      * @param args the command line arguments
@@ -292,6 +311,7 @@ public class RR extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel processnumber;
     private javax.swing.JTextField quantumtime;
+    private javax.swing.JButton simulate;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

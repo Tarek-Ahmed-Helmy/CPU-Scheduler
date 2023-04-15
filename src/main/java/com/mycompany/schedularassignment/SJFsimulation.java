@@ -18,8 +18,11 @@ public class SJFsimulation extends javax.swing.JFrame {
     public SJFsimulation() {
         initComponents();
     }
-    public SJFsimulation(ArrayList<ArrayList<String>> info) {
+    boolean preemptive;
+    public SJFsimulation(ArrayList<ArrayList<String>> info, boolean p) {
         initComponents();
+        preemptive=p;
+        
     }
 
     /**
@@ -58,6 +61,7 @@ public class SJFsimulation extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
