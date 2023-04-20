@@ -254,7 +254,7 @@ public class SJF extends javax.swing.JFrame {
     private void simulateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simulateMouseClicked
         if(counter==noofprocesses+1&&combobox.getSelectedIndex()!=0){
             boolean preemptive=combobox.getSelectedIndex()==1;
-            new Prioritysimulation(info, preemptive).setVisible(true);
+            new SJFsimulation(info, preemptive).setVisible(true);
             this.dispose();
         }
         else if(counter==noofprocesses+1){
