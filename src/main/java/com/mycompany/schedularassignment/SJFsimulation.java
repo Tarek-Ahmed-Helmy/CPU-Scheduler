@@ -278,9 +278,18 @@ public class SJFsimulation  extends javax.swing.JFrame{
                             }
                         }
                     });
+                    while(currtime != Integer.parseInt(sub.get(0).get(1))){
+                        currtime++;
+                        totaltime++;
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                     arrived.add(sub.get(0));
                     sub.remove(0);
-                    while(!arrived.isEmpty()){
+                    while(currtime != totaltime){
                         int remainingBurstTime = Integer.parseInt(arrived.get(0).get(2));
                         int processid = arrived.get(0).get(0).charAt(1) - 49;
                         while(remainingBurstTime > 0){
@@ -336,37 +345,48 @@ public class SJFsimulation  extends javax.swing.JFrame{
                         for(int i = 0 ; i<arrived.size();i++){
                             if(sub.contains(arrived.get(i))) sub.remove(arrived.get(i));
                         }
-                        jTextPane1.setText(jTextPane1.getText() + arrived.get(0).get(0) +"(" + String.valueOf(currtime)+")");
-                        int processid = arrived.get(0).get(0).charAt(1) - 49;
-                        currtime++;
-                        arrived.get(0).set(2, String.valueOf(Integer.parseInt(arrived.get(0).get(2)) - 1));
-                        burstTimes.get(processid).setText(arrived.get(0).get(2));
-                        bars.get(processid).setValue(Integer.parseInt(info.get(processid).get(2)) - Integer.parseInt(arrived.get(0).get(2)));
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        if(Integer.parseInt(arrived.get(0).get(2)) == 0){
-                            trunaroundtime = currtime - Integer.parseInt(arrived.get(0).get(1));
-                            totalturnaroundTime += trunaroundtime;
-                            waitingTime = trunaroundtime - Integer.parseInt(info.get(processid).get(2));
-                            totalwaitingTime += waitingTime;
-                            waitingTimes.get(processid).setText(String.valueOf(waitingTime));
-                            arrived.remove(0);
-                        }
-                        for(int i = 0 ; i<sub.size();i++){
-                            if(currtime == Integer.parseInt(sub.get(i).get(1))){
-                                arrived.add(sub.get(i));
-                                Collections.sort(arrived ,new Comparator<ArrayList<String>>(){
-                                    public int compare(ArrayList<String> p1, ArrayList<String> p2) {
-                                        return Integer.parseInt(p1.get(2)) - Integer.parseInt(p2.get(2));
-                                    }
-                                });
+                        if(!arrived.isEmpty()){
+                            jTextPane1.setText(jTextPane1.getText() + arrived.get(0).get(0) +"(" + String.valueOf(currtime)+")");
+                            int processid = arrived.get(0).get(0).charAt(1) - 49;
+                            currtime++;
+                            arrived.get(0).set(2, String.valueOf(Integer.parseInt(arrived.get(0).get(2)) - 1));
+                            burstTimes.get(processid).setText(arrived.get(0).get(2));
+                            bars.get(processid).setValue(Integer.parseInt(info.get(processid).get(2)) - Integer.parseInt(arrived.get(0).get(2)));
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            if(Integer.parseInt(arrived.get(0).get(2)) == 0){
+                                trunaroundtime = currtime - Integer.parseInt(arrived.get(0).get(1));
+                                totalturnaroundTime += trunaroundtime;
+                                waitingTime = trunaroundtime - Integer.parseInt(info.get(processid).get(2));
+                                totalwaitingTime += waitingTime;
+                                waitingTimes.get(processid).setText(String.valueOf(waitingTime));
+                                arrived.remove(0);
+                            }
+                            for(int i = 0 ; i<sub.size();i++){
+                                if(currtime == Integer.parseInt(sub.get(i).get(1))){
+                                    arrived.add(sub.get(i));
+                                    Collections.sort(arrived ,new Comparator<ArrayList<String>>(){
+                                        public int compare(ArrayList<String> p1, ArrayList<String> p2) {
+                                            return Integer.parseInt(p1.get(2)) - Integer.parseInt(p2.get(2));
+                                        }
+                                    });
+                                }
+                            }
+                            for(int i = 0 ; i<arrived.size();i++){
+                                if(sub.contains(arrived.get(i))) sub.remove(arrived.get(i));
                             }
                         }
-                        for(int i = 0 ; i<arrived.size();i++){
-                            if(sub.contains(arrived.get(i))) sub.remove(arrived.get(i));
+                        else{
+                            currtime++;
+                            totaltime++;
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
                     }
                     avgwaitingTime = totalwaitingTime / info.size();
