@@ -22,9 +22,6 @@ public class FCFSsimulation extends javax.swing.JFrame {
     public FCFSsimulation() {
         initComponents();
     }
-    public FCFSsimulation(ArrayList<ArrayList<String>> info) {
-        initComponents();
-    }
     static ArrayList<ArrayList<String>> info;
     ArrayList<JLabel> processes = new ArrayList<>();
     ArrayList<JLabel> burstTimes = new ArrayList<>();
@@ -39,11 +36,11 @@ public class FCFSsimulation extends javax.swing.JFrame {
     double avgwaitingTime;
     double avgturnaroundTime;
     ArrayList<ArrayList<String>> arrived = new ArrayList<>();
-    public FCFSsimulation(ArrayList<ArrayList<String>> info, boolean p)  {
+    public FCFSsimulation(ArrayList<ArrayList<String>> info) {
         initComponents();
         this.info = info;
         GridLayout grid = new GridLayout(info.size() + 1,4);
-        jPanel1.setLayout(grid);
+        jPanel2.setLayout(grid);
         grid.setHgap(25);
         grid.setVgap(15);
         for(int i = 0 ;i< info.size(); i++){
@@ -53,18 +50,18 @@ public class FCFSsimulation extends javax.swing.JFrame {
             processes.add(new JLabel(info.get(i).get(0)));
             processes.get(i).setFont(new java.awt.Font("Segoe UI", 1, 14));
             processes.get(i).setHorizontalAlignment(JLabel.CENTER);
-            jPanel1.add( processes.get(i));
+            jPanel2.add( processes.get(i));
             burstTimes.add(new JLabel(info.get(i).get(2)));
             burstTimes.get(i).setFont(new java.awt.Font("Segoe UI", 1, 14));
             burstTimes.get(i).setHorizontalAlignment(JLabel.CENTER);
-            jPanel1.add( burstTimes.get(i));
+            jPanel2.add( burstTimes.get(i));
             bars.add(new JProgressBar(0,Integer.parseInt(info.get(i).get(2))));
             bars.get(i).setSize(160, 20);
-            jPanel1.add(bars.get(i));
+            jPanel2.add(bars.get(i));
             waitingTimes.add(new JLabel("0"));
             waitingTimes.get(i).setFont(new java.awt.Font("Segoe UI", 1, 14));
             waitingTimes.get(i).setHorizontalAlignment(JLabel.CENTER);
-            jPanel1.add( waitingTimes.get(i));
+            jPanel2.add( waitingTimes.get(i));
         }
         for(int i = 0 ;i< info.size(); i++){
             totaltime += Integer.parseInt(info.get(i).get(2));
