@@ -84,8 +84,6 @@ public class RRsimulation extends javax.swing.JFrame {
 
         // Initialize the arrivedProcesses queue with the initial set of processes
         arrivedProcesses = new LinkedList<>(info);
-        
-        startSimulation();
     }
 
     
@@ -357,7 +355,7 @@ public class RRsimulation extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-
+        startSimulation();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
