@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.Timer;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  *
@@ -22,55 +27,143 @@ public class RRsimulation extends javax.swing.JFrame {
     public RRsimulation() {
         initComponents();
     }
+    
     static ArrayList<ArrayList<String>> info;
     boolean preemptive;
     ArrayList<JLabel> processes = new ArrayList<>();
     ArrayList<JLabel> burstTimes = new ArrayList<>();
     ArrayList<JLabel> waitingTimes = new ArrayList<>();
     ArrayList<JProgressBar> bars = new ArrayList<>();
-    int currtime = 0;
+    int currTime = 0;
     int totaltime = 0;
-    int trunaroundtime;
+    int turnaroundTime;
     int waitingTime;
-    double totalwaitingTime = 0;
-    double totalturnaroundTime = 0;
-    double avgwaitingTime;
-    double avgturnaroundTime;
-    ArrayList<ArrayList<String>> arrived = new ArrayList<>();
-    int quantum_time;
-    public RRsimulation(ArrayList<ArrayList<String>> info, int q) {
+    double totalWaitingTime = 0;
+    double totalTurnaroundTime = 0;
+    double avgWaitingTime;
+    double avgTurnaroundTime;
+    Queue<ArrayList<String>> arrivedProcesses; // Queue to hold the arrived processes
+    int quantumTime;
+    Timer timer;
+    ArrayList<String> currentProcess = null;
+    ArrayList<String> startingBurstTimes = new ArrayList<>();
+
+    public RRsimulation(ArrayList<ArrayList<String>> info, int quantumTime) {
         initComponents();
-        quantum_time=q;
+        this.quantumTime = quantumTime;
         this.info = info;
-        GridLayout grid = new GridLayout(info.size() + 1,4);
+        GridLayout grid = new GridLayout(info.size() + 1, 4);
         jPanel2.setLayout(grid);
         grid.setHgap(25);
         grid.setVgap(15);
-        for(int i = 0 ;i< info.size(); i++){
-            String [] row = {info.get(i).get(0), info.get(i).get(1), info.get(i).get(2)};
-            DefaultTableModel tab=(DefaultTableModel)jTable1.getModel();
+        for (int i = 0; i < info.size(); i++) {
+            String[] row = { info.get(i).get(0), info.get(i).get(1), info.get(i).get(2) };
+            DefaultTableModel tab = (DefaultTableModel) jTable1.getModel();
             tab.addRow(row);
             processes.add(new JLabel(info.get(i).get(0)));
             processes.get(i).setFont(new java.awt.Font("Segoe UI", 1, 14));
             processes.get(i).setHorizontalAlignment(JLabel.CENTER);
-            jPanel2.add( processes.get(i));
+            jPanel2.add(processes.get(i));
             burstTimes.add(new JLabel(info.get(i).get(2)));
             burstTimes.get(i).setFont(new java.awt.Font("Segoe UI", 1, 14));
             burstTimes.get(i).setHorizontalAlignment(JLabel.CENTER);
-            jPanel2.add( burstTimes.get(i));
-            bars.add(new JProgressBar(0,Integer.parseInt(info.get(i).get(2))));
+            jPanel2.add(burstTimes.get(i));
+            bars.add(new JProgressBar(0, Integer.parseInt(info.get(i).get(2))));
             bars.get(i).setSize(160, 20);
             jPanel2.add(bars.get(i));
             waitingTimes.add(new JLabel("0"));
             waitingTimes.get(i).setFont(new java.awt.Font("Segoe UI", 1, 14));
             waitingTimes.get(i).setHorizontalAlignment(JLabel.CENTER);
-            jPanel2.add( waitingTimes.get(i));
+            jPanel2.add(waitingTimes.get(i));
+            
+            startingBurstTimes.add(info.get(i).get(2));
         }
-        for(int i = 0 ;i< info.size(); i++){
+        for (int i = 0; i < info.size(); i++) {
             totaltime += Integer.parseInt(info.get(i).get(2));
         }
+
+        // Initialize the arrivedProcesses queue with the initial set of processes
+        arrivedProcesses = new LinkedList<>(info);
+        
+        startSimulation();
     }
 
+    
+    private void scheduleNextProcess() {
+    if (arrivedProcesses.isEmpty() && currentProcess == null) {
+        // All processes have been completed, stop the simulation
+        timer.stop();
+        return;
+    }
+
+    // Get the next process from the queue
+    currentProcess = arrivedProcesses.poll();
+    int burstTime = Integer.parseInt(currentProcess.get(2));
+    int processIndex = info.indexOf(currentProcess);
+    int startingBurstTime = Integer.parseInt(startingBurstTimes.get(processIndex));
+    JProgressBar progressBar = bars.get(processIndex);
+    JLabel waitingTimeLabel = waitingTimes.get(processIndex);
+
+    // Update the progress bar
+    int executionTime = Math.min(quantumTime, burstTime); // Execute for quantum time or remaining burst time, whichever is smaller
+    progressBar.setValue(progressBar.getValue() + executionTime);
+
+    if (burstTime > executionTime) {
+        // The process is not completed, update the remaining burst time and add it back to the queue
+        burstTime -= executionTime;
+        currentProcess.set(2, String.valueOf(burstTime));
+        arrivedProcesses.offer(currentProcess);
+    } else {
+        // The process is completed, calculate turnaround time and waiting time
+        int startTime = Integer.parseInt(currentProcess.get(1));
+        int endTime = currTime + executionTime;
+        int turnaroundTime = endTime - startTime;
+        //int turnaroundTime = currTime - startTime + executionTime;
+        int waitingTime = turnaroundTime - startingBurstTime;
+        totalTurnaroundTime += turnaroundTime;
+        totalWaitingTime += waitingTime;
+
+        // Update the waiting time label
+        waitingTimeLabel.setText(String.valueOf(waitingTime));
+        
+        currentProcess = null;
+    }
+
+    // Update the current time
+    currTime += executionTime;
+}
+
+    private void startSimulation() {
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                scheduleNextProcess();
+                //currTime++;
+
+                if (currTime >= totaltime) {
+                    // All processes have been executed, calculate average times
+                    avgTurnaroundTime = totalTurnaroundTime / info.size();
+                    avgWaitingTime = totalWaitingTime / info.size();
+
+                    // Display average times or perform any required actions
+                    jTextField2.setText(String.format("%.02f", avgWaitingTime));
+                    jTextField1.setText(String.format("%.02f", avgTurnaroundTime));
+                        
+                    timer.stop();
+                }
+            }
+        });
+
+        timer.start();
+    }
+
+
+
+    
+
+
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -209,7 +302,7 @@ public class RRsimulation extends javax.swing.JFrame {
                                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(204, 204, 204)
+                        .addGap(208, 208, 208)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))

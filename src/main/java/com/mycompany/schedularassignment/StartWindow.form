@@ -105,9 +105,9 @@
                       <Group type="102" attributes="0">
                           <Component id="jLabel1" min="-2" pref="63" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="fcfs" alignment="3" min="-2" pref="47" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="noofprocesses" alignment="0" min="-2" pref="47" max="-2" attributes="0"/>
+                              <Component id="fcfs" min="-2" pref="47" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Component id="jLabel2" min="-2" pref="58" max="-2" attributes="0"/>
