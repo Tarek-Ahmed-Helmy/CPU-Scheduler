@@ -43,11 +43,13 @@ public class SJFsimulation  extends javax.swing.JFrame{
     double totalturnaroundTime = 0;
     double avgwaitingTime;
     double avgturnaroundTime;
+    boolean key = false;
     GridLayout grid;
     ArrayList<ArrayList<String>> sub;
     ArrayList<ArrayList<String>> arrived = new ArrayList<>();
     public SJFsimulation(ArrayList<ArrayList<String>> info, boolean p)  {
         initComponents();
+        back.setEnabled(false);
         this.info = info;
         preemptive=p;
         grid = new GridLayout(info.size() + 1,4);
@@ -116,6 +118,7 @@ public class SJFsimulation  extends javax.swing.JFrame{
         bursttime = new javax.swing.JTextField();
         add = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
+        back = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(102, 102, 102));
@@ -224,6 +227,13 @@ public class SJFsimulation  extends javax.swing.JFrame{
         jLabel12.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         jLabel12.setText("Add Dynamically:");
 
+        back.setText("Back");
+        back.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                backMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -242,9 +252,10 @@ public class SJFsimulation  extends javax.swing.JFrame{
                         .addComponent(bursttime, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(add, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(back, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(add, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -262,7 +273,9 @@ public class SJFsimulation  extends javax.swing.JFrame{
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addComponent(add)
-                .addGap(43, 43, 43))
+                .addGap(5, 5, 5)
+                .addComponent(back)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -349,6 +362,8 @@ public class SJFsimulation  extends javax.swing.JFrame{
         for(ArrayList<String> st:info){
             sub.add((ArrayList<String>)st.clone());
         }
+        simulate.setEnabled(false);
+        if(key){}
         new Thread(){
             public void run(){
                 if(!preemptive){
@@ -422,6 +437,9 @@ public class SJFsimulation  extends javax.swing.JFrame{
                     averagewaitingtime.setText(String.format("%.02f", avgwaitingTime));
                     avgturnaroundTime = totalturnaroundTime / info.size();
                     averageturnaroundtime.setText(String.format("%.02f", avgturnaroundTime));
+                    add.setEnabled(false);
+                    back.setEnabled(true);
+                    key = true;
                 }
                 else{
                     while(currtime != totaltime){
@@ -487,6 +505,9 @@ public class SJFsimulation  extends javax.swing.JFrame{
                     averagewaitingtime.setText(String.format("%.02f", avgwaitingTime));
                     avgturnaroundTime = totalturnaroundTime / info.size();
                     averageturnaroundtime.setText(String.format("%.02f", avgturnaroundTime));
+                    add.setEnabled(false);
+                    back.setEnabled(true);
+                    key = true;
                 }
             }
         }.start();
@@ -494,13 +515,12 @@ public class SJFsimulation  extends javax.swing.JFrame{
 
     private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
 
-        boolean key=false;
         try{
-            if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()){
+            if(key){
+            }else if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()){
                 JOptionPane.showMessageDialog(this,"All text fields must be filled!");
             }
             else if(Integer.parseInt(arrivaltime.getText())>=currtime&&Integer.parseInt(bursttime.getText())>=1){
-                key=true;
                 ArrayList<String> data= new ArrayList<String>();
                 ArrayList<String> datacpy= new ArrayList<String>();
                 data.add("P"+Integer.toString(info.size()+1));
@@ -554,6 +574,13 @@ public class SJFsimulation  extends javax.swing.JFrame{
         }
     }//GEN-LAST:event_addMouseClicked
 
+    private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
+        if(key){
+            new SJF().setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_backMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -593,6 +620,7 @@ public class SJFsimulation  extends javax.swing.JFrame{
     private javax.swing.JTextField arrivaltime;
     private javax.swing.JTextField averageturnaroundtime;
     private javax.swing.JTextField averagewaitingtime;
+    private javax.swing.JButton back;
     private javax.swing.JTextField bursttime;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
