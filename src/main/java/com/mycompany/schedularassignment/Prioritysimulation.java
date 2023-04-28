@@ -4,7 +4,16 @@
  */
 package com.mycompany.schedularassignment;
 
+import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -13,16 +22,69 @@ import java.util.ArrayList;
 public class Prioritysimulation extends javax.swing.JFrame {
 
     /**
-     * Creates new form Prioritysimulation
+     * Creates new form
      */
     public Prioritysimulation() {
         initComponents();
     }
+    static ArrayList<ArrayList<String>> info;
     boolean preemptive;
+    ArrayList<JLabel> processes = new ArrayList<>();
+    ArrayList<JLabel> burstTimes = new ArrayList<>();
+    ArrayList<JLabel> waitingTimes = new ArrayList<>();
+    ArrayList<JProgressBar> bars = new ArrayList<>();
+    int currtime = 0;
+    int totaltime = 0;
+    int trunaroundtime;
+    int waitingTime;
+    int remainingBurstTime;
+    int noOfDynamicallyAddedProcess = 0;
+    double totalwaitingTime = 0;
+    double totalturnaroundTime = 0;
+    double avgwaitingTime;
+    double avgturnaroundTime;
+    boolean key = false;
+    GridLayout grid;
+    ArrayList<ArrayList<String>> sub;
+    ArrayList<ArrayList<String>> arrived = new ArrayList<>();
     public Prioritysimulation(ArrayList<ArrayList<String>> info, boolean p) {
         initComponents();
         preemptive=p;
-        
+        back.setEnabled(false);
+        this.info = info;
+        preemptive=p;
+        grid = new GridLayout(info.size() + 1,4);
+        mainpanel.setLayout(grid);
+        grid.setHgap(25);
+        grid.setVgap(15);
+        for(int i = 0 ;i< info.size(); i++){
+            String [] row = {info.get(i).get(0), info.get(i).get(1), info.get(i).get(2) , info.get(i).get(3)};
+            DefaultTableModel tab=(DefaultTableModel)table.getModel();
+            tab.addRow(row);
+            processes.add(new JLabel(info.get(i).get(0)));
+            processes.get(i).setFont(new java.awt.Font("Segoe UI", 1, 14));
+            processes.get(i).setHorizontalAlignment(JLabel.CENTER);
+            mainpanel.add( processes.get(i));
+            burstTimes.add(new JLabel(info.get(i).get(2)));
+            burstTimes.get(i).setFont(new java.awt.Font("Segoe UI", 1, 14));
+            burstTimes.get(i).setHorizontalAlignment(JLabel.CENTER);
+            mainpanel.add( burstTimes.get(i));
+            bars.add(new JProgressBar(0,Integer.parseInt(info.get(i).get(2))));
+            bars.get(i).setSize(160, 20);
+            mainpanel.add(bars.get(i));
+            waitingTimes.add(new JLabel("0"));
+            waitingTimes.get(i).setFont(new java.awt.Font("Segoe UI", 1, 14));
+            waitingTimes.get(i).setHorizontalAlignment(JLabel.CENTER);
+            mainpanel.add( waitingTimes.get(i));
+            
+        }
+        for(int i = 0 ;i< info.size(); i++){
+            totaltime += Integer.parseInt(info.get(i).get(2));
+        }
+    }
+    public void clear(){
+        arrivaltime.setText("");
+        bursttime.setText("");
     }
 
     /**
@@ -122,11 +184,11 @@ public class Prioritysimulation extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bursttime, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
+                .addGap(22, 22, 22)
                 .addComponent(add)
-                .addGap(5, 5, 5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(back)
-                .addContainerGap())
+                .addGap(12, 12, 12))
         );
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 3, 16)); // NOI18N
@@ -146,7 +208,7 @@ public class Prioritysimulation extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Process", "Arrival Time", "Burrst Time"
+                "Process", "Arrival Time", "Burrst Time", "Priority"
             }
         ));
         jScrollPane1.setViewportView(table);
@@ -230,11 +292,11 @@ public class Prioritysimulation extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14)
                 .addComponent(mainpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -388,7 +450,7 @@ public class Prioritysimulation extends javax.swing.JFrame {
                     Collections.sort(sub ,new Comparator<ArrayList<String>>(){
                         public int compare(ArrayList<String> p1, ArrayList<String> p2) {
                             if (p1.get(1).equals(p2.get(1))) {
-                                return Integer.parseInt(p1.get(2)) - Integer.parseInt(p2.get(2));
+                                return Integer.parseInt(p1.get(3)) - Integer.parseInt(p2.get(3));
                             } else {
                                 return Integer.parseInt(p1.get(1)) - Integer.parseInt(p2.get(1));
                             }
@@ -447,7 +509,7 @@ public class Prioritysimulation extends javax.swing.JFrame {
                         }
                         Collections.sort(arrived ,new Comparator<ArrayList<String>>(){
                             public int compare(ArrayList<String> p1, ArrayList<String> p2) {
-                                return Integer.parseInt(p1.get(2)) - Integer.parseInt(p2.get(2));
+                                return Integer.parseInt(p1.get(3)) - Integer.parseInt(p2.get(3));
                             }
                         });
                     }
@@ -466,7 +528,7 @@ public class Prioritysimulation extends javax.swing.JFrame {
                                 arrived.add(sub.get(i));
                                 Collections.sort(arrived ,new Comparator<ArrayList<String>>(){
                                     public int compare(ArrayList<String> p1, ArrayList<String> p2) {
-                                        return Integer.parseInt(p1.get(2)) - Integer.parseInt(p2.get(2));
+                                        return Integer.parseInt(p1.get(3)) - Integer.parseInt(p2.get(3));
                                     }
                                 });
                             }
@@ -500,7 +562,7 @@ public class Prioritysimulation extends javax.swing.JFrame {
                                     arrived.add(sub.get(i));
                                     Collections.sort(arrived ,new Comparator<ArrayList<String>>(){
                                         public int compare(ArrayList<String> p1, ArrayList<String> p2) {
-                                            return Integer.parseInt(p1.get(2)) - Integer.parseInt(p2.get(2));
+                                            return Integer.parseInt(p1.get(3)) - Integer.parseInt(p2.get(3));
                                         }
                                     });
                                 }
