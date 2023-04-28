@@ -375,37 +375,36 @@ public class SJFsimulation  extends javax.swing.JFrame{
                         int remainingBurstTime = Integer.parseInt(arrived.get(0).get(2));
                         int processid = arrived.get(0).get(0).charAt(1) - 49;
                         while(remainingBurstTime > 0){
-                                jTextPane1.setText(jTextPane1.getText() + arrived.get(0).get(0) +"(" + String.valueOf(currtime)+")");
-                                remainingBurstTime--;
-                                burstTimes.get(processid).setText(String.valueOf(remainingBurstTime));
-                                bars.get(processid).setValue(Integer.parseInt(info.get(processid).get(2)) - remainingBurstTime);
-                                currtime++;
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException ex) {
-                                            Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
-                                }
+                            jTextPane1.setText(jTextPane1.getText() + arrived.get(0).get(0) +"(" + String.valueOf(currtime)+")");
+                            remainingBurstTime--;
+                            burstTimes.get(processid).setText(String.valueOf(remainingBurstTime));
+                            bars.get(processid).setValue(Integer.parseInt(info.get(processid).get(2)) - remainingBurstTime);
+                            currtime++;
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            trunaroundtime = currtime - Integer.parseInt(arrived.get(0).get(1));
-                            totalturnaroundTime += trunaroundtime;
-                            waitingTime = trunaroundtime - Integer.parseInt(arrived.get(0).get(2));
-                            totalwaitingTime += waitingTime;
-                            waitingTimes.get(processid).setText(String.valueOf(waitingTime));
-                            arrived.remove(0);
-                            for(int i = 0 ; i<sub.size();i++){
-                                System.out.println(i);
-                                if(Integer.parseInt(sub.get(i).get(1)) <= currtime){
-                                    arrived.add(sub.get(i));
-                                }
+                        }
+                        trunaroundtime = currtime - Integer.parseInt(arrived.get(0).get(1));
+                        totalturnaroundTime += trunaroundtime;
+                        waitingTime = trunaroundtime - Integer.parseInt(arrived.get(0).get(2));
+                        totalwaitingTime += waitingTime;
+                        waitingTimes.get(processid).setText(String.valueOf(waitingTime));
+                        arrived.remove(0);
+                        for(int i = 0 ; i<sub.size();i++){
+                            if(Integer.parseInt(sub.get(i).get(1)) <= currtime){
+                                arrived.add(sub.get(i));
                             }
-                            for(int i = 0 ; i<arrived.size();i++){
-                                if(sub.contains(arrived.get(i))) sub.remove(arrived.get(i));
+                        }
+                        for(int i = 0 ; i<arrived.size();i++){
+                            if(sub.contains(arrived.get(i))) sub.remove(arrived.get(i));
+                        }
+                        Collections.sort(arrived ,new Comparator<ArrayList<String>>(){
+                            public int compare(ArrayList<String> p1, ArrayList<String> p2) {
+                                return Integer.parseInt(p1.get(2)) - Integer.parseInt(p2.get(2));
                             }
-                            Collections.sort(arrived ,new Comparator<ArrayList<String>>(){
-                                public int compare(ArrayList<String> p1, ArrayList<String> p2) {
-                                    return Integer.parseInt(p1.get(2)) - Integer.parseInt(p2.get(2));
-                                }
-                            });
+                        });
                     }
                     avgwaitingTime = totalwaitingTime / info.size();
                     averagewaitingtime.setText(String.format("%.02f", avgwaitingTime));
@@ -497,26 +496,28 @@ public class SJFsimulation  extends javax.swing.JFrame{
                 DefaultTableModel tab=(DefaultTableModel)table.getModel();
                 tab.addRow(row);
                 info.add(data);
+                sub.add(data);
+                totaltime += Integer.parseInt(info.get(info.size() - 1).get(2));
                 grid.setRows(info.size()+1);
                 grid.setColumns(4);
                 mainpanel.setLayout(grid);
                 grid.setHgap(25);
                 grid.setVgap(15);
-                processes.add(new JLabel(info.get(info.size()).get(0)));
-                processes.get(info.size()).setFont(new java.awt.Font("Segoe UI", 1, 14));
-                processes.get(info.size()).setHorizontalAlignment(JLabel.CENTER);
-                mainpanel.add( processes.get(info.size()));
-                burstTimes.add(new JLabel(info.get(info.size()).get(2)));
-                burstTimes.get(info.size()).setFont(new java.awt.Font("Segoe UI", 1, 14));
-                burstTimes.get(info.size()).setHorizontalAlignment(JLabel.CENTER);
-                mainpanel.add( burstTimes.get(info.size()));
-                bars.add(new JProgressBar(0,Integer.parseInt(info.get(info.size()).get(2))));
-                bars.get(info.size()).setSize(160, 20);
-                mainpanel.add(bars.get(info.size()));
+                processes.add(new JLabel(info.get(info.size() - 1).get(0)));
+                processes.get(info.size() - 1).setFont(new java.awt.Font("Segoe UI", 1, 14));
+                processes.get(info.size() - 1).setHorizontalAlignment(JLabel.CENTER);
+                mainpanel.add( processes.get(info.size() - 1));
+                burstTimes.add(new JLabel(info.get(info.size() - 1).get(2)));
+                burstTimes.get(info.size() - 1).setFont(new java.awt.Font("Segoe UI", 1, 14));
+                burstTimes.get(info.size() - 1).setHorizontalAlignment(JLabel.CENTER);
+                mainpanel.add( burstTimes.get(info.size() - 1));
+                bars.add(new JProgressBar(0,Integer.parseInt(info.get(info.size() - 1).get(2))));
+                bars.get(info.size() - 1).setSize(160, 20);
+                mainpanel.add(bars.get(info.size() - 1));
                 waitingTimes.add(new JLabel("0"));
-                waitingTimes.get(info.size()).setFont(new java.awt.Font("Segoe UI", 1, 14));
-                waitingTimes.get(info.size()).setHorizontalAlignment(JLabel.CENTER);
-                mainpanel.add( waitingTimes.get(info.size()));
+                waitingTimes.get(info.size() - 1).setFont(new java.awt.Font("Segoe UI", 1, 14));
+                waitingTimes.get(info.size() - 1).setHorizontalAlignment(JLabel.CENTER);
+                mainpanel.add( waitingTimes.get(info.size() - 1));
                 clear();
             }else{
                 JOptionPane.showMessageDialog(this,"Arrival time must be >= current time and Burst time must be >= 1");
