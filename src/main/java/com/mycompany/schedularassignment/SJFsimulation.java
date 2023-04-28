@@ -37,16 +37,19 @@ public class SJFsimulation  extends javax.swing.JFrame{
     int totaltime = 0;
     int trunaroundtime;
     int waitingTime;
+    int remainingBurstTime;
     int noOfDynamicallyAddedProcess = 0;
     double totalwaitingTime = 0;
     double totalturnaroundTime = 0;
     double avgwaitingTime;
     double avgturnaroundTime;
+    boolean key = false;
     GridLayout grid;
     ArrayList<ArrayList<String>> sub;
     ArrayList<ArrayList<String>> arrived = new ArrayList<>();
     public SJFsimulation(ArrayList<ArrayList<String>> info, boolean p)  {
         initComponents();
+        back.setEnabled(false);
         this.info = info;
         preemptive=p;
         grid = new GridLayout(info.size() + 1,4);
@@ -102,8 +105,6 @@ public class SJFsimulation  extends javax.swing.JFrame{
         jLabel8 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        averageturnaroundtime = new javax.swing.JTextField();
-        averagewaitingtime = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         simulate = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -115,6 +116,9 @@ public class SJFsimulation  extends javax.swing.JFrame{
         bursttime = new javax.swing.JTextField();
         add = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
+        back = new javax.swing.JButton();
+        averagewaitingtime = new javax.swing.JLabel();
+        averageturnaroundtime = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(102, 102, 102));
@@ -182,18 +186,6 @@ public class SJFsimulation  extends javax.swing.JFrame{
         jLabel6.setFont(new java.awt.Font("Segoe UI", 3, 16)); // NOI18N
         jLabel6.setText("Average Waiting Time:");
 
-        averageturnaroundtime.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                averageturnaroundtimeActionPerformed(evt);
-            }
-        });
-
-        averagewaitingtime.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                averagewaitingtimeActionPerformed(evt);
-            }
-        });
-
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel7.setText("Process Queue");
 
@@ -223,6 +215,13 @@ public class SJFsimulation  extends javax.swing.JFrame{
         jLabel12.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         jLabel12.setText("Add Dynamically:");
 
+        back.setText("Back");
+        back.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                backMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -241,9 +240,10 @@ public class SJFsimulation  extends javax.swing.JFrame{
                         .addComponent(bursttime, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(add, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(back, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(add, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -261,8 +261,18 @@ public class SJFsimulation  extends javax.swing.JFrame{
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addComponent(add)
-                .addGap(43, 43, 43))
+                .addGap(5, 5, 5)
+                .addComponent(back)
+                .addContainerGap())
         );
+
+        averagewaitingtime.setBackground(new java.awt.Color(255, 255, 255));
+        averagewaitingtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averagewaitingtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+
+        averageturnaroundtime.setBackground(new java.awt.Color(255, 255, 255));
+        averageturnaroundtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averageturnaroundtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -290,12 +300,12 @@ public class SJFsimulation  extends javax.swing.JFrame{
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(180, 180, 180)
                         .addComponent(jLabel6)
-                        .addGap(40, 40, 40)
-                        .addComponent(averagewaitingtime, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(143, 143, 143)
+                        .addGap(18, 18, 18)
+                        .addComponent(averagewaitingtime, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(152, 152, 152)
                         .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(averageturnaroundtime, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(averageturnaroundtime, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -314,18 +324,14 @@ public class SJFsimulation  extends javax.swing.JFrame{
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(mainpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(averagewaitingtime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGap(7, 7, 7)
-                            .addComponent(averageturnaroundtime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(10, 10, 10)))
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(averagewaitingtime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(averageturnaroundtime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -334,20 +340,14 @@ public class SJFsimulation  extends javax.swing.JFrame{
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void averageturnaroundtimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_averageturnaroundtimeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_averageturnaroundtimeActionPerformed
-
-    private void averagewaitingtimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_averagewaitingtimeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_averagewaitingtimeActionPerformed
-
     private void simulateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simulateActionPerformed
         // TODO add your handling code here:
         sub = new ArrayList<ArrayList<String>>();
         for(ArrayList<String> st:info){
             sub.add((ArrayList<String>)st.clone());
         }
+        simulate.setEnabled(false);
+        if(key){}
         new Thread(){
             public void run(){
                 if(!preemptive){
@@ -369,48 +369,61 @@ public class SJFsimulation  extends javax.swing.JFrame{
                             Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    arrived.add(sub.get(0));
-                    sub.remove(0);
                     while(currtime != totaltime){
-                        int remainingBurstTime = Integer.parseInt(arrived.get(0).get(2));
-                        int processid = arrived.get(0).get(0).charAt(1) - 49;
-                        while(remainingBurstTime > 0){
-                                jTextPane1.setText(jTextPane1.getText() + arrived.get(0).get(0) +"(" + String.valueOf(currtime)+")");
-                                remainingBurstTime--;
-                                burstTimes.get(processid).setText(String.valueOf(remainingBurstTime));
-                                bars.get(processid).setValue(Integer.parseInt(info.get(processid).get(2)) - remainingBurstTime);
+                        if(arrived.isEmpty()){
+                            while(currtime != Integer.parseInt(sub.get(0).get(1))){
                                 currtime++;
+                                totaltime++;
                                 try {
                                     Thread.sleep(1000);
                                 } catch (InterruptedException ex) {
-                                            Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
+                                    Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
-                            trunaroundtime = currtime - Integer.parseInt(arrived.get(0).get(1));
-                            totalturnaroundTime += trunaroundtime;
-                            waitingTime = trunaroundtime - Integer.parseInt(arrived.get(0).get(2));
-                            totalwaitingTime += waitingTime;
-                            waitingTimes.get(processid).setText(String.valueOf(waitingTime));
-                            arrived.remove(0);
-                            for(int i = 0 ; i<sub.size();i++){
-                                System.out.println(i);
-                                if(Integer.parseInt(sub.get(i).get(1)) <= currtime){
-                                    arrived.add(sub.get(i));
-                                }
+                            arrived.add(sub.get(0));
+                            sub.remove(0);
+                        }
+                        remainingBurstTime = Integer.parseInt(arrived.get(0).get(2));
+                        int processid = arrived.get(0).get(0).charAt(1) - 49;
+                        while(remainingBurstTime > 0){
+                            jTextPane1.setText(jTextPane1.getText() + arrived.get(0).get(0) +"(" + String.valueOf(currtime)+")");
+                            remainingBurstTime--;
+                            burstTimes.get(processid).setText(String.valueOf(remainingBurstTime));
+                            bars.get(processid).setValue(Integer.parseInt(info.get(processid).get(2)) - remainingBurstTime);
+                            currtime++;
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            for(int i = 0 ; i<arrived.size();i++){
-                                if(sub.contains(arrived.get(i))) sub.remove(arrived.get(i));
+                        }
+                        trunaroundtime = currtime - Integer.parseInt(arrived.get(0).get(1));
+                        totalturnaroundTime += trunaroundtime;
+                        waitingTime = trunaroundtime - Integer.parseInt(arrived.get(0).get(2));
+                        totalwaitingTime += waitingTime;
+                        waitingTimes.get(processid).setText(String.valueOf(waitingTime));
+                        arrived.remove(0);
+                        for(int i = 0 ; i<sub.size();i++){
+                            if(Integer.parseInt(sub.get(i).get(1)) <= currtime){
+                                arrived.add(sub.get(i));
                             }
-                            Collections.sort(arrived ,new Comparator<ArrayList<String>>(){
-                                public int compare(ArrayList<String> p1, ArrayList<String> p2) {
-                                    return Integer.parseInt(p1.get(2)) - Integer.parseInt(p2.get(2));
-                                }
-                            });
+                        }
+                        for(int i = 0 ; i<arrived.size();i++){
+                            if(sub.contains(arrived.get(i))) sub.remove(arrived.get(i));
+                        }
+                        Collections.sort(arrived ,new Comparator<ArrayList<String>>(){
+                            public int compare(ArrayList<String> p1, ArrayList<String> p2) {
+                                return Integer.parseInt(p1.get(2)) - Integer.parseInt(p2.get(2));
+                            }
+                        });
                     }
                     avgwaitingTime = totalwaitingTime / info.size();
                     averagewaitingtime.setText(String.format("%.02f", avgwaitingTime));
                     avgturnaroundTime = totalturnaroundTime / info.size();
                     averageturnaroundtime.setText(String.format("%.02f", avgturnaroundTime));
+                    add.setEnabled(false);
+                    back.setEnabled(true);
+                    key = true;
                 }
                 else{
                     while(currtime != totaltime){
@@ -431,9 +444,10 @@ public class SJFsimulation  extends javax.swing.JFrame{
                             jTextPane1.setText(jTextPane1.getText() + arrived.get(0).get(0) +"(" + String.valueOf(currtime)+")");
                             int processid = arrived.get(0).get(0).charAt(1) - 49;
                             currtime++;
-                            arrived.get(0).set(2, String.valueOf(Integer.parseInt(arrived.get(0).get(2)) - 1));
+                            remainingBurstTime = Integer.parseInt(arrived.get(0).get(2)) - 1;
+                            arrived.get(0).set(2, String.valueOf(remainingBurstTime));
                             burstTimes.get(processid).setText(arrived.get(0).get(2));
-                            bars.get(processid).setValue(Integer.parseInt(info.get(processid).get(2)) - Integer.parseInt(arrived.get(0).get(2)));
+                            bars.get(processid).setValue(Integer.parseInt(info.get(processid).get(2)) - remainingBurstTime);
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException ex) {
@@ -475,6 +489,9 @@ public class SJFsimulation  extends javax.swing.JFrame{
                     averagewaitingtime.setText(String.format("%.02f", avgwaitingTime));
                     avgturnaroundTime = totalturnaroundTime / info.size();
                     averageturnaroundtime.setText(String.format("%.02f", avgturnaroundTime));
+                    add.setEnabled(false);
+                    back.setEnabled(true);
+                    key = true;
                 }
             }
         }.start();
@@ -482,41 +499,55 @@ public class SJFsimulation  extends javax.swing.JFrame{
 
     private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
 
-        boolean key=false;
         try{
-            if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()){
+            if(key){
+            }else if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()){
                 JOptionPane.showMessageDialog(this,"All text fields must be filled!");
             }
             else if(Integer.parseInt(arrivaltime.getText())>=currtime&&Integer.parseInt(bursttime.getText())>=1){
-                key=true;
                 ArrayList<String> data= new ArrayList<String>();
+                ArrayList<String> datacpy= new ArrayList<String>();
                 data.add("P"+Integer.toString(info.size()+1));
                 data.add(arrivaltime.getText());
                 data.add(bursttime.getText());
+                datacpy.add("P"+Integer.toString(info.size()+1));
+                datacpy.add(arrivaltime.getText());
+                datacpy.add(bursttime.getText());
                 String [] row = {"P"+Integer.toString(info.size()+1), arrivaltime.getText(), bursttime.getText()};
                 DefaultTableModel tab=(DefaultTableModel)table.getModel();
                 tab.addRow(row);
                 info.add(data);
+                sub.add(datacpy);
+                Collections.sort(sub ,new Comparator<ArrayList<String>>(){
+                    public int compare(ArrayList<String> p1, ArrayList<String> p2) {
+                        if (p1.get(1).equals(p2.get(1))) {
+                            return Integer.parseInt(p1.get(2)) - Integer.parseInt(p2.get(2));
+                        } else {
+                            return Integer.parseInt(p1.get(1)) - Integer.parseInt(p2.get(1));
+                        }
+                    }
+                });
+                totaltime += Integer.parseInt(info.get(info.size() - 1).get(2));
                 grid.setRows(info.size()+1);
                 grid.setColumns(4);
                 mainpanel.setLayout(grid);
                 grid.setHgap(25);
                 grid.setVgap(15);
-                processes.add(new JLabel(info.get(info.size()).get(0)));
-                processes.get(info.size()).setFont(new java.awt.Font("Segoe UI", 1, 14));
-                processes.get(info.size()).setHorizontalAlignment(JLabel.CENTER);
-                mainpanel.add( processes.get(info.size()));
-                burstTimes.add(new JLabel(info.get(info.size()).get(2)));
-                burstTimes.get(info.size()).setFont(new java.awt.Font("Segoe UI", 1, 14));
-                burstTimes.get(info.size()).setHorizontalAlignment(JLabel.CENTER);
-                mainpanel.add( burstTimes.get(info.size()));
-                bars.add(new JProgressBar(0,Integer.parseInt(info.get(info.size()).get(2))));
-                bars.get(info.size()).setSize(160, 20);
-                mainpanel.add(bars.get(info.size()));
+                processes.add(new JLabel(info.get(info.size() - 1).get(0)));
+                processes.get(info.size() - 1).setFont(new java.awt.Font("Segoe UI", 1, 14));
+                processes.get(info.size() - 1).setHorizontalAlignment(JLabel.CENTER);
+                mainpanel.add( processes.get(info.size() - 1));
+                burstTimes.add(new JLabel(info.get(info.size() - 1).get(2)));
+                burstTimes.get(info.size() - 1).setFont(new java.awt.Font("Segoe UI", 1, 14));
+                burstTimes.get(info.size() - 1).setHorizontalAlignment(JLabel.CENTER);
+                mainpanel.add( burstTimes.get(info.size() - 1));
+                bars.add(new JProgressBar(0,Integer.parseInt(info.get(info.size() - 1).get(2))));
+                bars.get(info.size() - 1).setSize(160, 20);
+                mainpanel.add(bars.get(info.size() - 1));
                 waitingTimes.add(new JLabel("0"));
-                waitingTimes.get(info.size()).setFont(new java.awt.Font("Segoe UI", 1, 14));
-                waitingTimes.get(info.size()).setHorizontalAlignment(JLabel.CENTER);
-                mainpanel.add( waitingTimes.get(info.size()));
+                waitingTimes.get(info.size() - 1).setFont(new java.awt.Font("Segoe UI", 1, 14));
+                waitingTimes.get(info.size() - 1).setHorizontalAlignment(JLabel.CENTER);
+                mainpanel.add( waitingTimes.get(info.size() - 1));
                 clear();
             }else{
                 JOptionPane.showMessageDialog(this,"Arrival time must be >= current time and Burst time must be >= 1");
@@ -526,6 +557,13 @@ public class SJFsimulation  extends javax.swing.JFrame{
             JOptionPane.showMessageDialog(this,"Time must be integer!");
         }
     }//GEN-LAST:event_addMouseClicked
+
+    private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
+        if(key){
+            new SJF().setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_backMouseClicked
 
     /**
      * @param args the command line arguments
@@ -564,8 +602,9 @@ public class SJFsimulation  extends javax.swing.JFrame{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JTextField arrivaltime;
-    private javax.swing.JTextField averageturnaroundtime;
-    private javax.swing.JTextField averagewaitingtime;
+    private javax.swing.JLabel averageturnaroundtime;
+    private javax.swing.JLabel averagewaitingtime;
+    private javax.swing.JButton back;
     private javax.swing.JTextField bursttime;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
