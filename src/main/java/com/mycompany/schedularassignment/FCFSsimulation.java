@@ -41,10 +41,12 @@ public class FCFSsimulation extends javax.swing.JFrame {
     double totalturnaroundTime = 0;
     double avgwaitingTime;
     double avgturnaroundTime;
+    boolean key = false;
     GridLayout grid;
     ArrayList<ArrayList<String>> arrived = new ArrayList<>();
     public FCFSsimulation(ArrayList<ArrayList<String>> info) {
         initComponents();
+        back.setEnabled(false);
         this.info = info;
         grid = new GridLayout(info.size() + 1,4);
         mainpanel.setLayout(grid);
@@ -74,6 +76,10 @@ public class FCFSsimulation extends javax.swing.JFrame {
             totaltime += Integer.parseInt(info.get(i).get(2));
         }
     }
+    public void clear(){
+        arrivaltime.setText("");
+        bursttime.setText("");
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -100,6 +106,7 @@ public class FCFSsimulation extends javax.swing.JFrame {
         bursttime = new javax.swing.JTextField();
         add = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
+        back = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         averageturnaroundtime = new javax.swing.JTextField();
@@ -183,6 +190,13 @@ public class FCFSsimulation extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         jLabel12.setText("Add Dynamically:");
 
+        back.setText("Back");
+        back.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                backMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -201,9 +215,10 @@ public class FCFSsimulation extends javax.swing.JFrame {
                         .addComponent(bursttime, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(add, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(add, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(back, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -221,7 +236,9 @@ public class FCFSsimulation extends javax.swing.JFrame {
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addComponent(add)
-                .addGap(43, 43, 43))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 3, 16)); // NOI18N
@@ -327,6 +344,8 @@ public class FCFSsimulation extends javax.swing.JFrame {
 
     private void simulateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simulateActionPerformed
         // TODO add your handling code here:
+        simulate.setEnabled(false);
+        if(key){}
         new Thread(){
             public void run(){
                 Collections.sort(info, new Comparator<ArrayList<String>>() {
@@ -370,19 +389,20 @@ public class FCFSsimulation extends javax.swing.JFrame {
                 averagewaitingtime.setText(String.format("%.02f", avgwaitingTime));
                 avgturnaroundTime = totalturnaroundTime / info.size();
                 averageturnaroundtime.setText(String.format("%.02f", avgturnaroundTime));
+                add.setEnabled(false);
+                back.setEnabled(true);
+                key = true;
             }
         }.start();
     }//GEN-LAST:event_simulateActionPerformed
 
     private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
 
-        boolean key=false;
         try{
-            if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()){
+            if(key){
+            }else if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()){
                 JOptionPane.showMessageDialog(this,"All text fields must be filled!");
-            }
-            else if(Integer.parseInt(arrivaltime.getText())>=currtime&&Integer.parseInt(bursttime.getText())>=1){
-                key=true;
+            }else if(Integer.parseInt(arrivaltime.getText())>=currtime&&Integer.parseInt(bursttime.getText())>=1){
                 ArrayList<String> data= new ArrayList<String>();
                 data.add("P"+Integer.toString(info.size()+1));
                 data.add(arrivaltime.getText());
@@ -412,6 +432,7 @@ public class FCFSsimulation extends javax.swing.JFrame {
                 waitingTimes.get(info.size() - 1).setFont(new java.awt.Font("Segoe UI", 1, 14));
                 waitingTimes.get(info.size() - 1).setHorizontalAlignment(JLabel.CENTER);
                 mainpanel.add( waitingTimes.get(info.size() - 1));
+                clear();
                 Collections.sort(info, new Comparator<ArrayList<String>>() {
                     public int compare(ArrayList<String> p1, ArrayList<String> p2) {
                         return Integer.parseInt(p1.get(1)) - Integer.parseInt(p2.get(1));   
@@ -434,6 +455,13 @@ public class FCFSsimulation extends javax.swing.JFrame {
     private void averagewaitingtimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_averagewaitingtimeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_averagewaitingtimeActionPerformed
+
+    private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
+        if(key){
+            new FCFS().setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_backMouseClicked
 
     /**
      * @param args the command line arguments
@@ -475,6 +503,7 @@ public class FCFSsimulation extends javax.swing.JFrame {
     private javax.swing.JTextField arrivaltime;
     private javax.swing.JTextField averageturnaroundtime;
     private javax.swing.JTextField averagewaitingtime;
+    private javax.swing.JButton back;
     private javax.swing.JTextField bursttime;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
