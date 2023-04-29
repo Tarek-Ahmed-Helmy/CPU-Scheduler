@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.schedularassignment;
 
 import java.awt.GridLayout;
@@ -15,10 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author 3afro
- */
 public class Prioritysimulation extends javax.swing.JFrame {
 
     /**
@@ -38,7 +30,6 @@ public class Prioritysimulation extends javax.swing.JFrame {
     int trunaroundtime;
     int waitingTime;
     int remainingBurstTime;
-    int noOfDynamicallyAddedProcess = 0;
     double totalwaitingTime = 0;
     double totalturnaroundTime = 0;
     double avgwaitingTime;
@@ -76,7 +67,6 @@ public class Prioritysimulation extends javax.swing.JFrame {
             waitingTimes.get(i).setFont(new java.awt.Font("Segoe UI", 1, 14));
             waitingTimes.get(i).setHorizontalAlignment(JLabel.CENTER);
             mainpanel.add( waitingTimes.get(i));
-            
         }
         for(int i = 0 ;i< info.size(); i++){
             totaltime += Integer.parseInt(info.get(i).get(2));
@@ -287,12 +277,12 @@ public class Prioritysimulation extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTextPane1);
 
         averagewaitingtime.setBackground(new java.awt.Color(255, 255, 255));
-        averagewaitingtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averagewaitingtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 18)); // NOI18N
         averagewaitingtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averagewaitingtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
         averageturnaroundtime.setBackground(new java.awt.Color(255, 255, 255));
-        averageturnaroundtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averageturnaroundtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 18)); // NOI18N
         averageturnaroundtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averageturnaroundtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
@@ -374,14 +364,12 @@ public class Prioritysimulation extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
-
+    private void addMouseClicked(java.awt.event.MouseEvent evt) {
         try{
             if(key){
             }else if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()||priority.getText().isEmpty()){
                 JOptionPane.showMessageDialog(this,"All text fields must be filled!");
-            }
-            else if(Integer.parseInt(arrivaltime.getText())>=currtime&&Integer.parseInt(bursttime.getText())>=1&&Integer.parseInt(priority.getText())>=1){
+            }else if(Integer.parseInt(arrivaltime.getText())>=currtime&&Integer.parseInt(bursttime.getText())>=1&&Integer.parseInt(priority.getText())>=1){
                 ArrayList<String> data= new ArrayList<String>();
                 ArrayList<String> datacpy= new ArrayList<String>();
                 data.add("P"+Integer.toString(info.size()+1));
@@ -435,16 +423,16 @@ public class Prioritysimulation extends javax.swing.JFrame {
         catch(NumberFormatException e){
             JOptionPane.showMessageDialog(this,"Time must be integer!");
         }
-    }//GEN-LAST:event_addMouseClicked
+    }
 
-    private void homeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeMouseClicked
+    private void homeMouseClicked(java.awt.event.MouseEvent evt) {
         if(key){
             new StartWindow().setVisible(true);
             this.dispose();
         }
-    }//GEN-LAST:event_homeMouseClicked
+    }
 
-    private void simulateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simulateActionPerformed
+    private void simulateActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         sub = new ArrayList<ArrayList<String>>();
         for(ArrayList<String> st:info){
@@ -599,7 +587,7 @@ public class Prioritysimulation extends javax.swing.JFrame {
                 }
             }
         }.start();
-    }//GEN-LAST:event_simulateActionPerformed
+    }
 
     /**
      * @param args the command line arguments

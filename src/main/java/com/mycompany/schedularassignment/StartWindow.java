@@ -1,15 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.schedularassignment;
 
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author som3a
- */
 public class StartWindow extends javax.swing.JFrame {
 
     /**
@@ -188,13 +180,11 @@ public class StartWindow extends javax.swing.JFrame {
         else if(priority.isSelected()&&key){
             new Priority(noofprocesses.getText()).setVisible(true);
             this.dispose();
-
         }
         else if(roundrobin.isSelected()&&key){
             new RR(noofprocesses.getText()).setVisible(true);
             this.dispose();
         }
-
     }//GEN-LAST:event_okMouseClicked
 
     private void noofprocessesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noofprocessesActionPerformed

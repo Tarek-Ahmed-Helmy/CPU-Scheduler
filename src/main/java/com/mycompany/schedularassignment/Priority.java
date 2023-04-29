@@ -1,19 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.schedularassignment;
 
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author som3a
- */
 public class Priority extends javax.swing.JFrame {
-
     /**
      * Creates new form Priority
      */
@@ -243,34 +234,30 @@ public class Priority extends javax.swing.JFrame {
         bursttime.setText("");
         priority.setText("");
     }
-    private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
-
-        boolean key=false;
+    private void addMouseClicked(java.awt.event.MouseEvent evt) {
         try{
             if(counter==noofprocesses+1){
             }else if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()||priority.getText().isEmpty()){
                 JOptionPane.showMessageDialog(this,"All text fields must be filled!");
-            }
-            else if(Integer.parseInt(arrivaltime.getText())>=0&&Integer.parseInt(bursttime.getText())>=1&&Integer.parseInt(priority.getText())>=1){
-            key=true;
-            String pNo = "P"+Integer.toString(counter);
-            processnumber.setText("P"+Integer.toString(++counter));
-            ArrayList<String> data= new ArrayList<String>();
-            data.add(pNo);
-            data.add(arrivaltime.getText());
-            data.add(bursttime.getText());
-            data.add(priority.getText());
-            String [] row = {pNo, arrivaltime.getText(), bursttime.getText(), priority.getText()};
-            DefaultTableModel tab=(DefaultTableModel)table.getModel();
-            tab.addRow(row);
-            info.add(data);
-            clear();
-            if(counter==noofprocesses+1){
-                add.setEnabled(false);
-                processnumber.setVisible(false);
-                simulate.setEnabled(true);
-                
-            }
+            }else if(Integer.parseInt(arrivaltime.getText())>=0&&Integer.parseInt(bursttime.getText())>=1&&Integer.parseInt(priority.getText())>=1){
+                String pNo = "P"+Integer.toString(counter);
+                processnumber.setText("P"+Integer.toString(++counter));
+                ArrayList<String> data= new ArrayList<String>();
+                data.add(pNo);
+                data.add(arrivaltime.getText());
+                data.add(bursttime.getText());
+                data.add(priority.getText());
+                String [] row = {pNo, arrivaltime.getText(), bursttime.getText(), priority.getText()};
+                DefaultTableModel tab=(DefaultTableModel)table.getModel();
+                tab.addRow(row);
+                info.add(data);
+                clear();
+                if(counter==noofprocesses+1){
+                    add.setEnabled(false);
+                    processnumber.setVisible(false);
+                    simulate.setEnabled(true);
+
+                }
             }else{
                 JOptionPane.showMessageDialog(this,"Arrival time must be >=0 and Burst time must be >= 1 and priority must be >= 1");
             }
@@ -278,9 +265,9 @@ public class Priority extends javax.swing.JFrame {
         catch(NumberFormatException e){
             JOptionPane.showMessageDialog(this,"Time and Priority must be integer!");
         }
-    }//GEN-LAST:event_addMouseClicked
+    }
 
-    private void simulateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simulateMouseClicked
+    private void simulateMouseClicked(java.awt.event.MouseEvent evt) {
         if(counter==noofprocesses+1&&combobox.getSelectedIndex()!=0){
             boolean preemptive=combobox.getSelectedIndex()==1;
             new Prioritysimulation(info, preemptive).setVisible(true);
@@ -289,22 +276,13 @@ public class Priority extends javax.swing.JFrame {
         else if(counter==noofprocesses+1){
             JOptionPane.showMessageDialog(this,"Select the type preemptive or non");
         }
-    }//GEN-LAST:event_simulateMouseClicked
+    }
 
-    private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
+    private void backMouseClicked(java.awt.event.MouseEvent evt) {
         new StartWindow().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_backMouseClicked
+    }
 
-    
-    /*
-    if(combobox.getSelectedIndex()!=0){
-                
-            }
-            else{
-                JOptionPane.showMessageDialog(this,"Choose one, please");
-            }     
-    */
     /**
      * @param args the command line arguments
      */

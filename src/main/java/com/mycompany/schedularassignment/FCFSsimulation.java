@@ -1,10 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.schedularassignment;
 
-import static com.mycompany.schedularassignment.SJFsimulation.info;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,10 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author 3afro
- */
 public class FCFSsimulation extends javax.swing.JFrame {
 
     /**
@@ -43,7 +34,7 @@ public class FCFSsimulation extends javax.swing.JFrame {
     double avgturnaroundTime;
     boolean key = false;
     GridLayout grid;
-    ArrayList<ArrayList<String>> arrived = new ArrayList<>();
+
     public FCFSsimulation(ArrayList<ArrayList<String>> info) {
         initComponents();
         home.setEnabled(false);
@@ -261,12 +252,12 @@ public class FCFSsimulation extends javax.swing.JFrame {
         jLabel7.setText("Process Queue");
 
         averageturnaroundtime.setBackground(new java.awt.Color(255, 255, 255));
-        averageturnaroundtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averageturnaroundtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 18)); // NOI18N
         averageturnaroundtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averageturnaroundtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
         averagewaitingtime.setBackground(new java.awt.Color(255, 255, 255));
-        averagewaitingtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averagewaitingtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 18)); // NOI18N
         averagewaitingtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averagewaitingtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
@@ -339,7 +330,7 @@ public class FCFSsimulation extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void simulateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simulateActionPerformed
+    private void simulateActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         simulate.setEnabled(false);
         if(key){}
@@ -391,10 +382,9 @@ public class FCFSsimulation extends javax.swing.JFrame {
                 key = true;
             }
         }.start();
-    }//GEN-LAST:event_simulateActionPerformed
+    }
 
-    private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
-
+    private void addMouseClicked(java.awt.event.MouseEvent evt) {
         try{
             if(key){
             }else if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()){
@@ -442,15 +432,14 @@ public class FCFSsimulation extends javax.swing.JFrame {
         catch(NumberFormatException e){
             JOptionPane.showMessageDialog(this,"Time must be integer!");
         }
-        
-    }//GEN-LAST:event_addMouseClicked
+    }
 
-    private void homeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeMouseClicked
+    private void homeMouseClicked(java.awt.event.MouseEvent evt) {
         if(key){
             new StartWindow().setVisible(true);
             this.dispose();
         }
-    }//GEN-LAST:event_homeMouseClicked
+    }
 
     /**
      * @param args the command line arguments

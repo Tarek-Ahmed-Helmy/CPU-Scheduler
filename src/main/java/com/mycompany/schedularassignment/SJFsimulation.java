@@ -1,26 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.schedularassignment;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
-import java.util.Queue;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author 3afro
- */
 public class SJFsimulation  extends javax.swing.JFrame{
-
     /**
      * Creates new form SJFsimulation
      */
@@ -38,7 +27,6 @@ public class SJFsimulation  extends javax.swing.JFrame{
     int trunaroundtime;
     int waitingTime;
     int remainingBurstTime;
-    int noOfDynamicallyAddedProcess = 0;
     double totalwaitingTime = 0;
     double totalturnaroundTime = 0;
     double avgwaitingTime;
@@ -47,7 +35,7 @@ public class SJFsimulation  extends javax.swing.JFrame{
     GridLayout grid;
     ArrayList<ArrayList<String>> sub;
     ArrayList<ArrayList<String>> arrived = new ArrayList<>();
-    public SJFsimulation(ArrayList<ArrayList<String>> info, boolean p)  {
+    public SJFsimulation(ArrayList<ArrayList<String>> info, boolean p){
         initComponents();
         home.setEnabled(false);
         this.info = info;
@@ -78,8 +66,7 @@ public class SJFsimulation  extends javax.swing.JFrame{
         }
         for(int i = 0 ;i< info.size(); i++){
             totaltime += Integer.parseInt(info.get(i).get(2));
-        }
-        
+        }   
     }
     public void clear(){
         arrivaltime.setText("");
@@ -267,12 +254,12 @@ public class SJFsimulation  extends javax.swing.JFrame{
         );
 
         averagewaitingtime.setBackground(new java.awt.Color(255, 255, 255));
-        averagewaitingtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averagewaitingtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 18)); // NOI18N
         averagewaitingtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averagewaitingtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
         averageturnaroundtime.setBackground(new java.awt.Color(255, 255, 255));
-        averageturnaroundtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averageturnaroundtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 18)); // NOI18N
         averageturnaroundtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averageturnaroundtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
@@ -367,7 +354,7 @@ public class SJFsimulation  extends javax.swing.JFrame{
                         totaltime++;
                         try {
                             Thread.sleep(1000);
-                        } catch (InterruptedException ex) {
+                        }catch(InterruptedException ex){
                             Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }

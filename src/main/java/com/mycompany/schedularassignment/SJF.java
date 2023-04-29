@@ -1,19 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.schedularassignment;
 
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author som3a
- */
 public class SJF extends javax.swing.JFrame {
-
     /**
      * Creates new form SJF
      */
@@ -217,14 +208,11 @@ public class SJF extends javax.swing.JFrame {
     }
     private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
 
-        boolean key=false;
         try{
             if(counter==noofprocesses+1){
             }else if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()){
                 JOptionPane.showMessageDialog(this,"All text fields must be filled!");
-            }
-            else if(Integer.parseInt(arrivaltime.getText())>=0&&Integer.parseInt(bursttime.getText())>=1){
-                key=true;
+            }else if(Integer.parseInt(arrivaltime.getText())>=0&&Integer.parseInt(bursttime.getText())>=1){
                 String pNo = "P"+Integer.toString(counter);
                 processnumber.setText("P"+Integer.toString(++counter));
                 ArrayList<String> data= new ArrayList<String>();
@@ -240,7 +228,6 @@ public class SJF extends javax.swing.JFrame {
                     add.setEnabled(false);
                     processnumber.setVisible(false);
                     simulate.setEnabled(true);
-
                 }
             }else{
                 JOptionPane.showMessageDialog(this,"Arrival time must be >=0 and Burst time must be >= 1");

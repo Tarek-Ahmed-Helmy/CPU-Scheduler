@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.schedularassignment;
 
 import java.awt.GridLayout;
@@ -18,10 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author 3afro
- */
 public class RRsimulation extends javax.swing.JFrame {
 
     /**
@@ -46,6 +38,7 @@ public class RRsimulation extends javax.swing.JFrame {
     double avgWaitingTime;
     double avgTurnaroundTime;
     boolean key = false;
+    int cnt;
     GridLayout grid;
     Queue<ArrayList<String>> arrivedProcesses; // Queue to hold the arrived processes
     int quantumTime;
@@ -58,6 +51,7 @@ public class RRsimulation extends javax.swing.JFrame {
         home.setEnabled(false);
         this.quantumTime = quantumTime;
         this.info = info;
+        cnt = info.size();
         grid = new GridLayout(info.size() + 1, 4);
         mainpanel.setLayout(grid);
         grid.setHgap(25);
@@ -87,7 +81,6 @@ public class RRsimulation extends javax.swing.JFrame {
         for (int i = 0; i < info.size(); i++) {
             totaltime += Integer.parseInt(info.get(i).get(2));
         }
-
         // Initialize the arrivedProcesses queue with the initial set of processes
         arrivedProcesses = new LinkedList<>(info);
     }
@@ -98,75 +91,80 @@ public class RRsimulation extends javax.swing.JFrame {
 
     
     private void scheduleNextProcess() {
-        
         if (arrivedProcesses.isEmpty() && currentProcess == null) {
             // All processes have been completed, stop the simulation
             timer.stop();
             return;
         }
-
         // Get the next process from the queue
         currentProcess = arrivedProcesses.poll();
-        while(currTime < Integer.parseInt(currentProcess.get(1))){
-            currTime++;
-            totaltime++;
+        if(Integer.parseInt(currentProcess.get(1))<=currTime){
+            int burstTime = Integer.parseInt(currentProcess.get(2));
+            int processIndex = info.indexOf(currentProcess);
+            int startingBurstTime = Integer.parseInt(startingBurstTimes.get(processIndex));
+            JProgressBar progressBar = bars.get(processIndex);
+            JLabel waitingTimeLabel = waitingTimes.get(processIndex);
+            // Update the progress bar
+            int executionTime = Math.min(quantumTime, burstTime); // Execute for quantum time or remaining burst time, whichever is smaller
+            progressBar.setValue(progressBar.getValue() + executionTime);
+            burstTimes.get(processIndex).setText(String.valueOf(Integer.parseInt(burstTimes.get(processIndex).getText())-executionTime));
+            int count = 0; 
+            while(count!=executionTime){
+                jTextPane1.setText(jTextPane1.getText() + currentProcess.get(0) +"(" + String.valueOf(currTime+count)+")");
+                count++;
+            }
+            if (burstTime > executionTime) {
+                // The process is not completed, update the remaining burst time and add it back to the queue
+                burstTime -= executionTime;
+                currentProcess.set(2, String.valueOf(burstTime));
+                arrivedProcesses.offer(currentProcess);
+            }else{
+                // The process is completed, calculate turnaround time and waiting time
+                int startTime = Integer.parseInt(currentProcess.get(1));
+                int endTime = currTime + executionTime;
+                int turnaroundTime = endTime - startTime;
+                //int turnaroundTime = currTime - startTime + executionTime;
+                int waitingTime = turnaroundTime - startingBurstTime;
+                totalTurnaroundTime += turnaroundTime;
+                totalWaitingTime += waitingTime;
+                // Update the waiting time label
+                waitingTimeLabel.setText(String.valueOf(waitingTime));
+                currentProcess = null;
+            }
+            // Update the current time
+            currTime += executionTime;
+            cnt = info.size();
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
-                    Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        int burstTime = Integer.parseInt(currentProcess.get(2));
-        int processIndex = info.indexOf(currentProcess);
-        int startingBurstTime = Integer.parseInt(startingBurstTimes.get(processIndex));
-        JProgressBar progressBar = bars.get(processIndex);
-        JLabel waitingTimeLabel = waitingTimes.get(processIndex);
-        // Update the progress bar
-        int executionTime = Math.min(quantumTime, burstTime); // Execute for quantum time or remaining burst time, whichever is smaller
-        progressBar.setValue(progressBar.getValue() + executionTime);
-        burstTimes.get(processIndex).setText(String.valueOf(Integer.parseInt(burstTimes.get(processIndex).getText())-executionTime));
-        int count = 0; 
-        while(count!=executionTime){
-            jTextPane1.setText(jTextPane1.getText() + currentProcess.get(0) +"(" + String.valueOf(currTime+count)+")");
-            count++;
-        }
-        if (burstTime > executionTime) {
-            // The process is not completed, update the remaining burst time and add it back to the queue
-            burstTime -= executionTime;
-            currentProcess.set(2, String.valueOf(burstTime));
+        }else{
+            cnt--;
+            if(cnt==0){
+                while(currTime != Integer.parseInt(currentProcess.get(1))){
+                    currTime++;
+                    totaltime++;
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(SJFsimulation.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
             arrivedProcesses.offer(currentProcess);
-        } else {
-            // The process is completed, calculate turnaround time and waiting time
-            int startTime = Integer.parseInt(currentProcess.get(1));
-            int endTime = currTime + executionTime;
-            int turnaroundTime = endTime - startTime;
-            //int turnaroundTime = currTime - startTime + executionTime;
-            int waitingTime = turnaroundTime - startingBurstTime;
-            totalTurnaroundTime += turnaroundTime;
-            totalWaitingTime += waitingTime;
-
-            // Update the waiting time label
-            waitingTimeLabel.setText(String.valueOf(waitingTime));
-
-            currentProcess = null;
         }
-
-        // Update the current time
-        currTime += executionTime;
     }
 
     private void startSimulation() {
-        timer = new Timer(1000, new ActionListener() {
+        timer = new Timer(1, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 scheduleNextProcess();
-                //currTime++;
-
                 if (currTime >= totaltime) {
                     // All processes have been executed, calculate average times
                     avgTurnaroundTime = totalTurnaroundTime / info.size();
                     avgWaitingTime = totalWaitingTime / info.size();
-
                     // Display average times or perform any required actions
                     averagewaitingtime.setText(String.format("%.02f", avgWaitingTime));
                     averageturnaroundtime.setText(String.format("%.02f", avgTurnaroundTime));
@@ -177,17 +175,8 @@ public class RRsimulation extends javax.swing.JFrame {
                 }
             }
         });
-
         timer.start();
     }
-
-
-
-    
-
-
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -248,7 +237,7 @@ public class RRsimulation extends javax.swing.JFrame {
         });
 
         averagewaitingtime.setBackground(new java.awt.Color(255, 255, 255));
-        averagewaitingtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averagewaitingtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 18)); // NOI18N
         averagewaitingtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averagewaitingtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
@@ -256,7 +245,7 @@ public class RRsimulation extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTextPane1);
 
         averageturnaroundtime.setBackground(new java.awt.Color(255, 255, 255));
-        averageturnaroundtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averageturnaroundtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 18)); // NOI18N
         averageturnaroundtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averageturnaroundtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
@@ -394,7 +383,7 @@ public class RRsimulation extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14)
                 .addComponent(mainpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -451,7 +440,6 @@ public class RRsimulation extends javax.swing.JFrame {
     }//GEN-LAST:event_simulateActionPerformed
 
     private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
-
         try{
             if(key){
             }else if(arrivaltime.getText().isEmpty()||bursttime.getText().isEmpty()){
@@ -459,7 +447,6 @@ public class RRsimulation extends javax.swing.JFrame {
             }
             else if(Integer.parseInt(arrivaltime.getText())>=currTime&&Integer.parseInt(bursttime.getText())>=1){
                 ArrayList<String> data= new ArrayList<String>();
-                ArrayList<String> datacpy= new ArrayList<String>();
                 data.add("P"+Integer.toString(info.size()+1));
                 data.add(arrivaltime.getText());
                 data.add(bursttime.getText());
@@ -467,6 +454,7 @@ public class RRsimulation extends javax.swing.JFrame {
                 DefaultTableModel tab=(DefaultTableModel)table.getModel();
                 tab.addRow(row);
                 info.add(data);
+                cnt++;
                 arrivedProcesses.add(data);
                 startingBurstTimes.add(info.get(info.size()-1).get(2));
                 totaltime += Integer.parseInt(info.get(info.size() - 1).get(2));
