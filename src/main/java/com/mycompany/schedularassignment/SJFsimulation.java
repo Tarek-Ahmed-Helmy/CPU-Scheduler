@@ -49,7 +49,7 @@ public class SJFsimulation  extends javax.swing.JFrame{
     ArrayList<ArrayList<String>> arrived = new ArrayList<>();
     public SJFsimulation(ArrayList<ArrayList<String>> info, boolean p)  {
         initComponents();
-        back.setEnabled(false);
+        home.setEnabled(false);
         this.info = info;
         preemptive=p;
         grid = new GridLayout(info.size() + 1,4);
@@ -116,7 +116,7 @@ public class SJFsimulation  extends javax.swing.JFrame{
         bursttime = new javax.swing.JTextField();
         add = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
-        back = new javax.swing.JButton();
+        home = new javax.swing.JButton();
         averagewaitingtime = new javax.swing.JLabel();
         averageturnaroundtime = new javax.swing.JLabel();
 
@@ -215,10 +215,10 @@ public class SJFsimulation  extends javax.swing.JFrame{
         jLabel12.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         jLabel12.setText("Add Dynamically:");
 
-        back.setText("Back");
-        back.addMouseListener(new java.awt.event.MouseAdapter() {
+        home.setText("Home");
+        home.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                backMouseClicked(evt);
+                homeMouseClicked(evt);
             }
         });
 
@@ -241,7 +241,7 @@ public class SJFsimulation  extends javax.swing.JFrame{
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(back, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(home, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(add, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))))
@@ -262,16 +262,18 @@ public class SJFsimulation  extends javax.swing.JFrame{
                 .addGap(29, 29, 29)
                 .addComponent(add)
                 .addGap(5, 5, 5)
-                .addComponent(back)
+                .addComponent(home)
                 .addContainerGap())
         );
 
         averagewaitingtime.setBackground(new java.awt.Color(255, 255, 255));
         averagewaitingtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averagewaitingtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averagewaitingtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
         averageturnaroundtime.setBackground(new java.awt.Color(255, 255, 255));
         averageturnaroundtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averageturnaroundtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averageturnaroundtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -422,7 +424,7 @@ public class SJFsimulation  extends javax.swing.JFrame{
                     avgturnaroundTime = totalturnaroundTime / info.size();
                     averageturnaroundtime.setText(String.format("%.02f", avgturnaroundTime));
                     add.setEnabled(false);
-                    back.setEnabled(true);
+                    home.setEnabled(true);
                     key = true;
                 }
                 else{
@@ -490,7 +492,7 @@ public class SJFsimulation  extends javax.swing.JFrame{
                     avgturnaroundTime = totalturnaroundTime / info.size();
                     averageturnaroundtime.setText(String.format("%.02f", avgturnaroundTime));
                     add.setEnabled(false);
-                    back.setEnabled(true);
+                    home.setEnabled(true);
                     key = true;
                 }
             }
@@ -558,12 +560,12 @@ public class SJFsimulation  extends javax.swing.JFrame{
         }
     }//GEN-LAST:event_addMouseClicked
 
-    private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
+    private void homeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeMouseClicked
         if(key){
-            new SJF().setVisible(true);
+            new StartWindow().setVisible(true);
             this.dispose();
         }
-    }//GEN-LAST:event_backMouseClicked
+    }//GEN-LAST:event_homeMouseClicked
 
     /**
      * @param args the command line arguments
@@ -604,8 +606,8 @@ public class SJFsimulation  extends javax.swing.JFrame{
     private javax.swing.JTextField arrivaltime;
     private javax.swing.JLabel averageturnaroundtime;
     private javax.swing.JLabel averagewaitingtime;
-    private javax.swing.JButton back;
     private javax.swing.JTextField bursttime;
+    private javax.swing.JButton home;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;

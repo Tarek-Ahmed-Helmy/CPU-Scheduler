@@ -50,7 +50,7 @@ public class Prioritysimulation extends javax.swing.JFrame {
     public Prioritysimulation(ArrayList<ArrayList<String>> info, boolean p) {
         initComponents();
         preemptive=p;
-        back.setEnabled(false);
+        home.setEnabled(false);
         this.info = info;
         preemptive=p;
         grid = new GridLayout(info.size() + 1,4);
@@ -105,7 +105,7 @@ public class Prioritysimulation extends javax.swing.JFrame {
         bursttime = new javax.swing.JTextField();
         add = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
-        back = new javax.swing.JButton();
+        home = new javax.swing.JButton();
         priority = new javax.swing.JTextField();
         label = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -143,10 +143,10 @@ public class Prioritysimulation extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         jLabel12.setText("Add Dynamically:");
 
-        back.setText("Back");
-        back.addMouseListener(new java.awt.event.MouseAdapter() {
+        home.setText("Home");
+        home.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                backMouseClicked(evt);
+                homeMouseClicked(evt);
             }
         });
 
@@ -162,7 +162,7 @@ public class Prioritysimulation extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(back, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(home, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(add, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -206,7 +206,7 @@ public class Prioritysimulation extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(add)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(back)
+                .addComponent(home)
                 .addGap(12, 12, 12))
         );
 
@@ -288,10 +288,12 @@ public class Prioritysimulation extends javax.swing.JFrame {
 
         averagewaitingtime.setBackground(new java.awt.Color(255, 255, 255));
         averagewaitingtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averagewaitingtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averagewaitingtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
         averageturnaroundtime.setBackground(new java.awt.Color(255, 255, 255));
         averageturnaroundtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averageturnaroundtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averageturnaroundtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -341,11 +343,9 @@ public class Prioritysimulation extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(simulate)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(mainpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1, 1, 1)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(mainpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(3, 3, 3)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -437,12 +437,12 @@ public class Prioritysimulation extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addMouseClicked
 
-    private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
+    private void homeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeMouseClicked
         if(key){
-            new Priority().setVisible(true);
+            new StartWindow().setVisible(true);
             this.dispose();
         }
-    }//GEN-LAST:event_backMouseClicked
+    }//GEN-LAST:event_homeMouseClicked
 
     private void simulateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simulateActionPerformed
         // TODO add your handling code here:
@@ -526,7 +526,7 @@ public class Prioritysimulation extends javax.swing.JFrame {
                     avgturnaroundTime = totalturnaroundTime / info.size();
                     averageturnaroundtime.setText(String.format("%.02f", avgturnaroundTime));
                     add.setEnabled(false);
-                    back.setEnabled(true);
+                    home.setEnabled(true);
                     key = true;
                 }
                 else{
@@ -594,7 +594,7 @@ public class Prioritysimulation extends javax.swing.JFrame {
                     avgturnaroundTime = totalturnaroundTime / info.size();
                     averageturnaroundtime.setText(String.format("%.02f", avgturnaroundTime));
                     add.setEnabled(false);
-                    back.setEnabled(true);
+                    home.setEnabled(true);
                     key = true;
                 }
             }
@@ -641,8 +641,8 @@ public class Prioritysimulation extends javax.swing.JFrame {
     private javax.swing.JTextField arrivaltime;
     private javax.swing.JLabel averageturnaroundtime;
     private javax.swing.JLabel averagewaitingtime;
-    private javax.swing.JButton back;
     private javax.swing.JTextField bursttime;
+    private javax.swing.JButton home;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;

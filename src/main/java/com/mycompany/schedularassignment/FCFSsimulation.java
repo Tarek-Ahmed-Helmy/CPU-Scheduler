@@ -46,7 +46,7 @@ public class FCFSsimulation extends javax.swing.JFrame {
     ArrayList<ArrayList<String>> arrived = new ArrayList<>();
     public FCFSsimulation(ArrayList<ArrayList<String>> info) {
         initComponents();
-        back.setEnabled(false);
+        home.setEnabled(false);
         this.info = info;
         grid = new GridLayout(info.size() + 1,4);
         mainpanel.setLayout(grid);
@@ -106,7 +106,7 @@ public class FCFSsimulation extends javax.swing.JFrame {
         bursttime = new javax.swing.JTextField();
         add = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
-        back = new javax.swing.JButton();
+        home = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -190,10 +190,10 @@ public class FCFSsimulation extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         jLabel12.setText("Add Dynamically:");
 
-        back.setText("Back");
-        back.addMouseListener(new java.awt.event.MouseAdapter() {
+        home.setText("Home");
+        home.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                backMouseClicked(evt);
+                homeMouseClicked(evt);
             }
         });
 
@@ -218,7 +218,7 @@ public class FCFSsimulation extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(add, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(back, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(home, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -237,7 +237,7 @@ public class FCFSsimulation extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addComponent(add)
                 .addGap(5, 5, 5)
-                .addComponent(back)
+                .addComponent(home)
                 .addContainerGap())
         );
 
@@ -262,10 +262,12 @@ public class FCFSsimulation extends javax.swing.JFrame {
 
         averageturnaroundtime.setBackground(new java.awt.Color(255, 255, 255));
         averageturnaroundtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averageturnaroundtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averageturnaroundtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
         averagewaitingtime.setBackground(new java.awt.Color(255, 255, 255));
         averagewaitingtime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        averagewaitingtime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         averagewaitingtime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -385,7 +387,7 @@ public class FCFSsimulation extends javax.swing.JFrame {
                 avgturnaroundTime = totalturnaroundTime / info.size();
                 averageturnaroundtime.setText(String.format("%.02f", avgturnaroundTime));
                 add.setEnabled(false);
-                back.setEnabled(true);
+                home.setEnabled(true);
                 key = true;
             }
         }.start();
@@ -443,12 +445,12 @@ public class FCFSsimulation extends javax.swing.JFrame {
         
     }//GEN-LAST:event_addMouseClicked
 
-    private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
+    private void homeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeMouseClicked
         if(key){
-            new FCFS().setVisible(true);
+            new StartWindow().setVisible(true);
             this.dispose();
         }
-    }//GEN-LAST:event_backMouseClicked
+    }//GEN-LAST:event_homeMouseClicked
 
     /**
      * @param args the command line arguments
@@ -490,8 +492,8 @@ public class FCFSsimulation extends javax.swing.JFrame {
     private javax.swing.JTextField arrivaltime;
     private javax.swing.JLabel averageturnaroundtime;
     private javax.swing.JLabel averagewaitingtime;
-    private javax.swing.JButton back;
     private javax.swing.JTextField bursttime;
+    private javax.swing.JButton home;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
